@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Backyard Sessions · Upperhand × Solo Stove</title>
+<meta name="robots" content="noindex" />
+<meta property="og:title" content="Backyard Sessions · Upperhand × Solo Stove" />
+<meta property="og:description" content="A concert series around the fire. Live music, real backyards, every Solo product doing its job." />
+<meta property="og:image" content="img/night.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#F6F3EB; --ink:#111; --blue:#0A45FF; --pink:#E04375; --lime:#D7FF00; --fire:#FF5A00;
+  --rule:rgba(17,17,17,.16); --grid:rgba(17,17,17,.055);
+  --rail:46px; --pad:clamp(22px,3.4vw,56px);
+  --display:"Archivo Black","Arial Black",Impact,sans-serif;
+  --sans:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --hand:"Caveat","Bradley Hand",cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--ink);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+
+#rail{position:fixed;left:0;top:0;bottom:0;width:var(--rail);background:var(--blue);z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:14px 0;transition:background .5s}
+#rail .mark{width:26px;height:26px;border-radius:3px;overflow:hidden}
+#rail .v{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;white-space:nowrap}
+#rail .sq{width:9px;height:9px;background:var(--lime)}
+body[data-tone="blue"] #rail{background:var(--ink)}
+#nav{position:fixed;top:16px;right:var(--pad);z-index:20;background:var(--ink);color:#fff;border-radius:999px;padding:8px 8px 8px 16px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+#nav i{width:6px;height:6px;border-radius:50%;background:var(--lime);display:inline-block}
+#nav i+i{background:var(--fire);margin-left:-8px}
+#nav b{background:var(--lime);color:var(--ink);border-radius:999px;padding:5px 11px;font-weight:700}
+#nav button{all:unset;cursor:pointer;padding:4px 7px;border-radius:999px}
+#nav button:hover{background:#333}
+#ticks{position:fixed;left:calc(var(--rail) + var(--pad));right:var(--pad);bottom:14px;z-index:20;display:flex;gap:4px;height:3px;mix-blend-mode:difference}
+#ticks span{flex:1;background:rgba(255,255,255,.22);transition:background .4s}
+#ticks span.on{background:#fff}
+
+#deck{position:fixed;inset:0 0 0 var(--rail)}
+.s{position:absolute;inset:0;padding:calc(var(--pad) + 30px) var(--pad) calc(var(--pad) + 8px);display:grid;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s;overflow:hidden}
+.s.on{opacity:1;visibility:visible;transition:opacity .45s ease}
+.s.paper{background:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+.s.black{background:#0d0d0d;color:var(--paper)}
+.s.blue{background:var(--blue);color:#fff}
+.s::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.s.black::after,.s.blue::after{mix-blend-mode:overlay;opacity:.3}
+
+.s .r{opacity:0;transform:translateY(16px)}
+.s.on .r{opacity:1;transform:none;transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i,0)*70ms + 120ms)}
+.s .wipe{clip-path:inset(0 100% 0 0)}
+.s.on .wipe{clip-path:inset(0 0 0 0);transition:clip-path .9s cubic-bezier(.7,0,.2,1) .15s}
+@media (prefers-reduced-motion:reduce){.s .r,.s .wipe{opacity:1;transform:none;clip-path:none;transition:none!important}}
+
+.k{font-family:var(--mono);font-size:clamp(9px,.78vw,11px);letter-spacing:.2em;text-transform:uppercase;display:flex;gap:10px;align-items:center;opacity:.72}
+.k::before{content:"";width:8px;height:8px;background:var(--fire);flex:none}
+.blue .k::before{background:var(--lime)}
+h1,h2{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.88;letter-spacing:-.025em;text-wrap:balance}
+h1{font-size:clamp(54px,9.4vw,168px)}
+h2{font-size:clamp(34px,5.2vw,92px)}
+h1 em,h2 em{font-style:normal;color:var(--fire)}
+.blue h2 em{color:var(--lime)}
+.hl{background:var(--lime);color:var(--ink);padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+p{font-size:clamp(14px,1.18vw,18px);line-height:1.5;max-width:46ch}
+.lede{font-size:clamp(16px,1.5vw,23px);line-height:1.38;font-weight:500;max-width:34ch}
+.m{font-family:var(--mono);font-size:clamp(9.5px,.8vw,11.5px);letter-spacing:.12em;text-transform:uppercase;line-height:1.7}
+.hand{font-family:var(--hand);font-weight:700;font-size:clamp(20px,2vw,32px);line-height:1.05;color:var(--blue);transform:rotate(-3deg);display:inline-block}
+.black .hand,.blue .hand{color:var(--lime)}
+.hand.fire{color:var(--fire)} .hand.pink{color:var(--pink)}
+
+.ph{position:relative;overflow:hidden;background:#000}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph .cap{position:absolute;left:10px;bottom:10px;background:var(--ink);color:#fff;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:4px 7px}
+.ph .n{position:absolute;right:10px;top:10px;font-family:var(--mono);font-size:10px;color:#fff;mix-blend-mode:difference}
+.crop{overflow:visible}
+.crop img{position:relative}
+.crop::before,.crop::after{content:"";position:absolute;width:16px;height:16px;border:1px solid currentColor;opacity:.5;z-index:3}
+.crop::before{left:-8px;top:-8px;border-right:0;border-bottom:0}
+.crop::after{right:-8px;bottom:-8px;border-left:0;border-top:0}
+.sqr{position:absolute;width:clamp(18px,2vw,30px);aspect-ratio:1}
+
+.lock{display:flex;align-items:center;gap:14px;font-family:var(--display);text-transform:uppercase;font-size:clamp(13px,1.2vw,18px);letter-spacing:-.01em}
+.lock svg{height:1.05em;width:auto}
+.lock .x{font-family:var(--mono);font-size:.8em;opacity:.6}
+
+#s1{grid-template-columns:1.08fr .92fr;gap:var(--pad);padding-right:0;padding-top:0;padding-bottom:0}
+#s1 .L{display:flex;flex-direction:column;justify-content:space-between;padding:calc(var(--pad) + 30px) 0 calc(var(--pad) + 8px)}
+#s1 h1{font-size:clamp(56px,8.6vw,158px);margin:18px 0 22px}
+#s1 .ph{height:100%}
+#s1 .ph .sqr{left:0;bottom:0;background:var(--lime)}
+#s1 .note{position:absolute;right:calc(46% + 12px);bottom:24%;z-index:4}
+#s1 .foot{display:flex;justify-content:space-between;align-items:end;gap:20px}
+
+#s2{grid-template-columns:1.2fr .8fr;gap:var(--pad);align-items:center}
+#s2 h2{font-size:clamp(36px,5.6vw,100px)}
+#s2 .facts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(20px,3vw,44px);border-top:1px solid rgba(255,255,255,.25)}
+#s2 .facts div{padding:14px 14px 0 0;border-right:1px solid rgba(255,255,255,.14)}
+#s2 .facts div:last-child{border:0;padding-left:14px}
+#s2 .facts div:nth-child(2){padding-left:14px}
+#s2 .big{font-family:var(--display);font-size:clamp(34px,4.6vw,78px);line-height:.9;color:var(--fire)}
+#s2 .ph{aspect-ratio:1;align-self:center}
+
+#s3{grid-template-columns:.78fr 1.22fr;gap:0;padding:0}
+#s3 .panel{background:var(--lime);padding:calc(var(--pad) + 30px) var(--pad) var(--pad);display:flex;flex-direction:column;justify-content:space-between;position:relative}
+#s3 .panel h2{font-size:clamp(32px,4.1vw,72px)}
+#s3 .ph{height:100%}
+#s3 .tags{position:absolute;right:var(--pad);bottom:calc(var(--pad) + 14px);display:flex;flex-direction:column;gap:6px;align-items:flex-end;z-index:4}
+#s3 .tags span{background:var(--paper);color:var(--ink);font-family:var(--mono);font-size:clamp(9.5px,.85vw,12px);letter-spacing:.12em;text-transform:uppercase;padding:6px 10px}
+#s3 .tags span b{color:var(--fire)}
+
+#s4{grid-template-rows:auto 1fr;gap:clamp(14px,2vw,30px)}
+#s4 .head{display:flex;justify-content:space-between;align-items:end;gap:30px}
+#s4 .route{display:grid;grid-template-columns:repeat(5,1fr);position:relative;align-self:stretch}
+#s4 .step{position:relative;padding:0 14px 0 0;display:flex;flex-direction:column}
+#s4 .step:nth-child(even){padding-top:clamp(28px,5vh,56px)}
+#s4 .t{font-family:var(--display);font-size:clamp(22px,2.5vw,42px);line-height:1}
+#s4 .bar{height:6px;background:var(--blue);margin:8px 0 10px;position:relative}
+#s4 .bar::after{content:"";position:absolute;right:-1px;top:-5px;width:16px;height:16px;border-radius:50%;background:var(--paper);border:4px solid var(--blue)}
+#s4 .step:nth-child(4) .bar{background:var(--fire)}
+#s4 .step:nth-child(4) .bar::after{border-color:var(--fire)}
+#s4 .step:nth-child(4) .m{color:var(--fire)}
+#s4 .step .ph{aspect-ratio:4/3;margin-bottom:10px}
+#s4 .step h3{font-family:var(--sans);font-weight:700;font-size:clamp(14px,1.2vw,18px);line-height:1.15;margin-bottom:4px}
+#s4 .step p{font-size:clamp(12px,.95vw,14.5px);line-height:1.4}
+#s4 .step .m{color:var(--blue);margin-bottom:4px}
+
+#s5{grid-template-columns:1fr 1fr;gap:var(--pad);align-items:stretch;padding-left:0;padding-top:0;padding-bottom:0}
+#s5 .ph{height:100%}
+#s5 .R{display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,2.4vw,34px);padding:calc(var(--pad) + 30px) 0 var(--pad)}
+#s5 .pair{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,255,255,.25)}
+#s5 .pair>div{padding:16px 18px 0 0}
+#s5 .pair>div+div{border-left:1px solid rgba(255,255,255,.14);padding-left:18px}
+#s5 .pair h3{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(17px,1.7vw,28px);margin-bottom:8px}
+#s5 .pair p{font-size:clamp(12.5px,1vw,15.5px);opacity:.86}
+#s5 .ph .sqr{right:0;top:0;background:var(--pink)}
+
+#s6{grid-template-columns:.9fr 1.1fr;gap:var(--pad);align-items:center}
+#s6 .out{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid #fff}
+#s6 .out div{padding:clamp(10px,1.4vw,20px) 14px clamp(10px,1.4vw,20px) 0;border-bottom:1px solid rgba(255,255,255,.3);display:flex;gap:14px;align-items:baseline}
+#s6 .out div:nth-child(even){padding-left:16px;border-left:1px solid rgba(255,255,255,.3)}
+#s6 .out b{font-family:var(--display);font-weight:400;font-size:clamp(30px,3.8vw,64px);line-height:.9;color:var(--lime);min-width:1.7em}
+#s6 .out span{font-size:clamp(12.5px,1.05vw,16px);line-height:1.3}
+
+#s7{grid-template-columns:1.05fr .95fr;gap:var(--pad);align-items:center}
+#s7 .brief{margin-top:clamp(14px,2vw,28px);border-top:2px solid var(--ink)}
+#s7 .brief li{list-style:none;display:grid;grid-template-columns:44px 1fr;gap:10px;padding:clamp(8px,1.1vw,14px) 0;border-bottom:1px solid var(--rule);font-size:clamp(13.5px,1.15vw,17px);line-height:1.35}
+#s7 .brief li b{font-family:var(--mono);font-weight:700;color:var(--pink);font-size:.85em;padding-top:2px}
+#s7 .proof{position:relative;background:var(--ink);color:var(--paper);padding:clamp(18px,2.2vw,34px);transform:rotate(1.2deg)}
+#s7 .proof::before{content:"";position:absolute;left:50%;top:-13px;width:96px;height:26px;background:rgba(224,67,117,.85);transform:translateX(-50%) rotate(-3deg)}
+#s7 .proof .n3{font-family:var(--display);font-size:clamp(26px,3.2vw,54px);line-height:.92;text-transform:uppercase;margin:10px 0 14px}
+#s7 .proof .n3 em{font-style:normal;color:var(--pink)}
+#s7 .proof p{font-size:clamp(12.5px,1vw,15px);opacity:.88;max-width:none}
+#s7 .proof .m{opacity:.6}
+#s7 .proof .vids{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+#s7 .proof .vids a{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);background:var(--paper);padding:6px 9px;text-decoration:none}
+#s7 .proof .vids a:hover{background:var(--lime)}
+
+#s8{grid-template-rows:auto 1fr;gap:clamp(12px,2vw,28px)}
+#s8 .map{position:relative;display:grid;grid-template-columns:repeat(4,1fr);align-items:end}
+#s8 .stop{position:relative;padding:0 18px 0 0}
+#s8 .stop:nth-child(2){padding-bottom:clamp(40px,9vh,90px)}
+#s8 .stop:nth-child(3){padding-bottom:clamp(80px,18vh,180px)}
+#s8 .stop:nth-child(4){padding-bottom:clamp(120px,27vh,270px)}
+#s8 .stop .line{height:8px;background:var(--blue);margin:12px -18px 0 0;position:relative}
+#s8 .stop:last-child .line{margin-right:0}
+#s8 .stop .line::before{content:"";position:absolute;left:0;top:-7px;width:22px;height:22px;border-radius:50%;background:var(--blue);border:5px solid var(--paper);outline:2px solid var(--blue)}
+#s8 .stop:not(:last-child) .line::after{content:"";position:absolute;right:0;bottom:0;width:8px;height:calc(clamp(40px,9vh,90px) + 8px);background:var(--blue)}
+#s8 .stop:first-child .line::before{background:var(--fire);outline-color:var(--fire)}
+#s8 .stop .ph0{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+#s8 .stop:first-child .ph0{color:var(--fire)}
+#s8 .stop h3{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(18px,2vw,34px);line-height:.95;margin:6px 0 8px}
+#s8 .stop p{font-size:clamp(12.5px,1vw,15px);line-height:1.4;max-width:30ch}
+
+#s9{grid-template-columns:.62fr 1fr;gap:var(--pad);align-items:center}
+#s9 .ph{height:min(78vh,100%);aspect-ratio:3/5;justify-self:start;max-width:100%}
+#s9 .rows{margin-top:clamp(14px,2vw,28px);border-top:2px solid var(--ink)}
+#s9 .row{display:grid;grid-template-columns:40px 1fr 1.5fr 18px;gap:14px;align-items:baseline;padding:clamp(8px,1.15vw,15px) 0;border-bottom:1px solid var(--rule)}
+#s9 .row b{font-family:var(--mono);font-size:11px;color:var(--blue)}
+#s9 .row h3{font-family:var(--sans);font-weight:700;font-size:clamp(14px,1.25vw,19px)}
+#s9 .row p{font-size:clamp(12.5px,1vw,15px);line-height:1.35;max-width:none}
+
+#s10{grid-template-columns:1.15fr .85fr;gap:var(--pad);padding-right:0;padding-top:0;padding-bottom:0}
+#s10 .L{display:flex;flex-direction:column;justify-content:space-between;padding:calc(var(--pad) + 30px) 0 calc(var(--pad) + 8px)}
+#s10 .three{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.25);margin-top:clamp(16px,2.4vw,34px)}
+#s10 .three div{padding:14px 16px 0 0}
+#s10 .three div+div{border-left:1px solid rgba(255,255,255,.14);padding-left:16px}
+#s10 .three h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;font-weight:500}
+#s10 .three p{font-size:clamp(12.5px,1.02vw,15.5px);opacity:.9}
+#s10 .cta{display:inline-flex;align-items:center;gap:12px;background:var(--lime);color:var(--ink);font-family:var(--mono);font-weight:700;font-size:clamp(11px,.95vw,13px);letter-spacing:.12em;text-transform:uppercase;padding:13px 18px;border-radius:999px;text-decoration:none}
+#s10 .ph{height:100%}
+
+@media (max-width:860px){
+  html,body{overflow:auto}
+  :root{--rail:0px}
+  #rail,#ticks,#nav button{display:none}
+  #deck{position:static}
+  .s{position:relative;opacity:1;visibility:visible;min-height:100svh;grid-template-columns:1fr!important;grid-template-rows:none!important;padding:64px 20px 40px!important;gap:22px!important}
+  .s .r,.s .wipe{opacity:1;transform:none;clip-path:none}
+  .ph{min-height:46vh}
+  #s9 .ph{height:auto;min-height:0}
+  #s1 .L,#s10 .L,#s5 .R{padding:0!important;gap:22px}
+  #s3 .panel{padding:22px!important;gap:22px}
+  #s1 .note,#s3 .tags{position:static;align-items:flex-start}
+  #s4 .route,#s8 .map,#s6 .out,#s2 .facts,#s10 .three,#s5 .pair{grid-template-columns:1fr 1fr;row-gap:22px}
+  #s4 .step:nth-child(even){padding-top:0}
+  #s8 .stop{padding-bottom:0!important}
+  #s8 .stop .line::after{display:none}
+  #s9 .row{grid-template-columns:30px 1fr}
+  #s9 .row p{grid-column:2} #s9 .row span{display:none}
+  #s7 .proof{transform:none}
+  #nav{right:12px;top:10px}
+}
+</style>
+</head>
+<body data-tone="paper">
+
+<svg width="0" height="0" style="position:absolute"><symbol id="solo" viewBox="0 0 2246.4 284.24"><path d="m2098.8 282.7c-11.03-7.35-17.46-18.68-17.46-30.93 0-31.85 43.19-31.55 43.19-78.41v-12.56c28.18 13.48 45.33 38.59 45.33 65.85 0 23.89-13.48 45.33-36.75 57.58 65.24-0.92 113.32-43.19 113.32-100.15 0-86.06-109.03-75.04-109.34-168.15v-15.93c-43.8 6.43-75.04 37.98-75.04 75.34 0 27.87 16.84 43.8 16.84 64.32 0 13.78-7.66 22.97-18.99 22.97-13.78 0-27.87-14.09-35.83-35.53-12.56 18.07-18.99 38.29-18.99 58.81 0 49.31 36.75 87.29 93.72 96.78" fill="#f04e23"/><g fill="currentColor"><path d="m974.94 270.76c17.46 9.19 36.45 13.48 59.42 13.48 55.74 0 89.74-26.03 89.74-69.22 0-93.11-157.43-65.54-157.43-113.94 0-16.23 17.76-25.11 50.54-25.11 44.1 0 69.53 16.54 69.53 45.02h32.47v-84.84h-34.92v10.41c0 8.58-6.74 9.49-18.99 2.76-15.62-8.58-34-13.17-57.58-13.17-55.74 0-90.35 25.42-90.35 67.99 0 89.74 155.89 66.77 155.89 114.55 0 16.54-18.99 25.73-53.9 25.73-45.02 0-66.16-14.4-66.16-45.02h-32.47v84.84h34.92v-10.41c0-8.88 7.04-9.8 19.3-3.06"/><path d="m1978.1 187.14c0-60.64-48.7-101.99-119.75-101.99s-121.9 41.35-121.9 99.54 51.76 99.54 128.33 99.54c60.34 0 101.68-23.89 108.42-62.17h-43.49c-4.59 13.78-30.94 22.97-66.16 22.97-45.38 0-71.46-16.15-76.78-47.17h191.32v-10.72zm-120.37-62.78c36.3 0 60.02 14.73 68.04 41.04h-137.27c7.88-26.26 32.38-41.04 69.23-41.04"/><path d="m1638.3 88.21v32.77h14.39c13.48 0 19.3 7.04 14.09 18.68l-41.49 94.15-41.82-94.15c-5.21-11.64 0-18.68 13.78-18.68h13.64v-32.77h-111.97v32.77h11.05c10.72 0 17.15 3.98 21.13 12.86l65.24 147.32h47.78l65.24-147.32c3.98-8.88 10.41-12.86 21.13-12.86h11.04v-32.77z"/><path d="m1170.7 70.14c0 12.25-5.82 18.07-18.07 18.07h-12.58v32.77h24.52v142.11c0 12.25 5.82 18.07 18.38 18.07h72.28v-32.46h-24.5c-12.56 0-18.38-5.82-18.38-18.07v-109.65h42.88v-32.77h-42.88v-52.07h-41.65z"/><path d="m1383.3 85.15c-71.67 0-120.67 40.43-120.67 99.54s49 99.54 120.67 99.54 120.67-40.43 120.67-99.54-49-99.54-120.67-99.54m0 159.88c-44.41 0-70.44-22.36-70.44-60.34s26.03-60.34 70.44-60.34 70.44 22.36 70.44 60.34-26.03 60.34-70.44 60.34"/><path d="m57.27 270.76c17.46 9.19 36.45 13.48 59.42 13.48 55.74 0 89.74-26.03 89.74-69.22 0-93.41-157.73-66.16-157.73-114.24 0-16.23 17.76-24.81 50.23-24.81 44.72 0 70.14 16.54 70.14 45.02h32.47v-84.84h-34.92v10.41c0 8.58-6.74 9.49-18.99 2.76-15.62-8.58-34-13.17-57.58-13.17-55.44 0-90.05 25.42-90.05 67.99 0 89.74 155.59 66.77 155.59 114.55 0 16.54-18.99 25.73-54.52 25.73-44.41 0-65.54-14.4-65.54-48.09h-32.47v87.9h34.92v-10.41c0-8.88 7.04-9.8 19.3-3.06"/><path d="m528.02 281.17h71.06v-32.47h-23.28c-14.7 0-19.6-4.9-19.6-19.6v-173.35c0-14.7-4.9-19.6-19.6-19.6h-71.05v32.47h23.28c14.7 0 19.6 4.9 19.6 19.6v173.35c0 14.7 4.9 19.6 19.6 19.6"/><path d="m719.75 85.15c-71.67 0-120.67 40.43-120.67 99.54s49 99.54 120.67 99.54 120.67-40.43 120.67-99.54-49-99.54-120.67-99.54m0 159.88c-44.41 0-70.44-22.36-70.44-60.34s26.03-60.34 70.44-60.34 70.44 22.36 70.44 60.34-26.03 60.34-70.44 60.34"/><path d="m349.46 85.15c-71.67 0-120.67 40.43-120.67 99.54s49 99.54 120.67 99.54 120.67-40.43 120.67-99.54-49-99.54-120.67-99.54m0 159.88c-44.41 0-70.44-22.36-70.44-60.34s26.03-60.34 70.44-60.34 70.44 22.36 70.44 60.34-26.03 60.34-70.44 60.34"/></g></symbol></svg>
+
+<aside id="rail">
+  <img class="mark" src="img/uh-mark.png" alt="Upperhand" />
+  <span class="v">Upperhand × Solo Stove · Backyard Sessions · Pitch 01</span>
+  <span class="sq"></span>
+</aside>
+<nav id="nav"><span><i></i><i></i></span><span id="ttl">Cover</span><button id="prev" aria-label="Previous">←</button><b id="idx">01 / 10</b><button id="next" aria-label="Next">→</button></nav>
+<div id="ticks"></div>
+
+<main id="deck">
+
+<section class="s paper" id="s1" data-t="Cover" data-tone="paper">
+  <div class="L">
+    <div class="lock r" style="--i:0"><span>Upperhand</span><span class="x">×</span><svg viewBox="0 0 2246.4 284.24" aria-label="Solo Stove"><use href="#solo"/></svg></div>
+    <div>
+      <div class="k r" style="--i:1">A concert series around the fire · working title</div>
+      <h1 class="r" style="--i:2">Backyard<br>Sessions<em>.</em></h1>
+      <p class="lede r" style="--i:3">Live music, real backyards, every Solo product doing its job. Filmed once, used everywhere.</p>
+    </div>
+    <div class="foot r" style="--i:4">
+      <div class="m">Two capabilities · one pilot<br>September 2026</div>
+      <div class="m" style="text-align:right">Prepared for Solo Stove<br>by Upperhand, Chicago</div>
+    </div>
+  </div>
+  <div class="ph wipe"><img src="img/night.jpg" alt="Friends laughing around a Solo Stove fire pit at night" /><span class="n">01</span><span class="cap">Photo · Solo Stove</span><span class="sqr"></span></div>
+  <span class="hand fire note r" style="--i:6">the fire is the stage &rarr;</span>
+</section>
+
+<section class="s black" id="s2" data-t="The opening" data-tone="black">
+  <div>
+    <div class="k r" style="--i:0">02 · The opening</div>
+    <h2 class="r" style="--i:1;margin-top:16px">You built the place people gather. Nobody has <em>played</em> it yet.</h2>
+    <p class="r" style="--i:2;margin-top:clamp(14px,2vw,26px);opacity:.85">Every Solo Stove story is about the moment around the fire. The one thing that has always happened around a fire, music, is the one thing the brand has never programmed.</p>
+    <div class="facts">
+      <div class="r" style="--i:3"><div class="big">15</div><div class="m">years of fires</div></div>
+      <div class="r" style="--i:4"><div class="big">3.8M</div><div class="m">people on the email list</div></div>
+      <div class="r" style="--i:5"><div class="big">0</div><div class="m">music series, tours or festival nights</div></div>
+    </div>
+  </div>
+  <div class="ph crop wipe"><img src="img/patio.jpg" alt="Solo Stove Bonfire burning on a patio with friends seated around it" /><span class="n">02</span></div>
+</section>
+
+<section class="s paper" id="s3" data-t="The idea" data-tone="paper">
+  <div class="panel">
+    <div class="k r" style="--i:0">03 · The idea</div>
+    <div>
+      <h2 class="r" style="--i:1">A show where the products do the hosting.</h2>
+      <p class="r" style="--i:2;margin-top:18px">Forty people in a real backyard. One emerging artist. One host who is there every time. Dinner comes out of the Pi. Drinks come out of the Windchill. The set happens around the Summit.</p>
+    </div>
+    <span class="hand r" style="--i:4;color:var(--ink)">nobody watches an ad.<br>everybody stays for a song.</span>
+  </div>
+  <div class="ph wipe"><img src="img/beach.jpg" alt="Three friends at dusk on a beach around a Solo Stove fire" /><span class="n">03</span><span class="cap">Photo · Solo Stove</span></div>
+  <div class="tags">
+    <span class="r" style="--i:3"><b>01</b> Hands-on product, no demo table</span>
+    <span class="r" style="--i:4"><b>02</b> Emerging talent, not a famous face</span>
+    <span class="r" style="--i:5"><b>03</b> Shot for paid and social from minute one</span>
+  </div>
+</section>
+
+<section class="s paper" id="s4" data-t="The night" data-tone="paper">
+  <div class="head">
+    <div><div class="k r" style="--i:0">04 · Run of show</div><h2 class="r" style="--i:1;margin-top:12px">One night. Every product has a <span class="hl">job</span>.</h2></div>
+    <span class="hand r" style="--i:6">cameras roll the whole time</span>
+  </div>
+  <div class="route">
+    <div class="step r" style="--i:2"><div class="t">6:30</div><div class="bar"></div><div class="ph"><img src="img/cooler.jpg" alt="Windchill cooler misting a backyard" /></div><div class="m">Windchill</div><h3>Doors. The bar is a cooler.</h3><p>Guests arrive to cold drinks and cold air. First content beat: the reveal.</p></div>
+    <div class="step r" style="--i:3"><div class="t">7:00</div><div class="bar"></div><div class="ph"><img src="img/pizza-toss.jpg" alt="Tossing pizza dough beside a Pi oven" /></div><div class="m">Pi · Steelfire</div><h3>Dinner is the opening act.</h3><p>Pizzas and the griddle run all night. Guests cook. The artist cooks.</p></div>
+    <div class="step r" style="--i:4"><div class="t">7:45</div><div class="bar"></div><div class="ph"><img src="img/lid.jpg" alt="Lifting the lid on a Solo Stove fire pit" /></div><div class="m">Summit</div><h3>The host lights it.</h3><p>Same ritual every episode. The series gets a signature before a note is played.</p></div>
+    <div class="step r" style="--i:5"><div class="t">8:00</div><div class="bar"></div><div class="ph"><img src="img/night.jpg" alt="Friends around a fire at night" /></div><div class="m">The set</div><h3>Five songs, fireside.</h3><p>No stage, no riser. The fire is the lighting rig. Forty people, close.</p></div>
+    <div class="step r" style="--i:6"><div class="t">9:00</div><div class="bar"></div><div class="ph"><img src="img/mesa.jpg" alt="Mesa tabletop fire pit with s'mores" /></div><div class="m">Mesa</div><h3>The after.</h3><p>S'mores on the tabletop. The host and the artist talk. This is the clip people share.</p></div>
+  </div>
+</section>
+
+<section class="s black" id="s5" data-t="The cast" data-tone="black">
+  <div class="ph wipe"><img src="img/deck.jpg" alt="Friends and a dog on a deck beside a Solo Stove" /><span class="n">05</span><span class="cap">Photo · Solo Stove</span><span class="sqr"></span></div>
+  <div class="R">
+    <div class="k r" style="--i:0">05 · The cast</div>
+    <h2 class="r" style="--i:1">Not a famous face. A <em>familiar</em> one.</h2>
+    <div class="pair">
+      <div class="r" style="--i:2"><h3>One host</h3><p>A single recurring person who lights the fire, runs the night and asks the questions. The host is the thread that makes ten separate evenings one series, and the face of every cut.</p></div>
+      <div class="r" style="--i:3"><h3>Emerging artists</h3><p>Working songwriters with real regional audiences. Good enough to stop a scroll, early enough that a Solo night is a career moment they will talk about for years.</p></div>
+    </div>
+    <span class="hand r" style="--i:4">the audience grows with them &uarr;</span>
+  </div>
+</section>
+
+<section class="s blue" id="s6" data-t="The content engine" data-tone="blue">
+  <div>
+    <div class="k r" style="--i:0">06 · Capability one, the output</div>
+    <h2 class="r" style="--i:1;margin-top:16px">One night in.<br>A <em>quarter</em> of creative out.</h2>
+    <p class="r" style="--i:2;margin-top:clamp(14px,2vw,26px);opacity:.92">The event is the shoot. Every night is captured to a shot list built backwards from your paid and social placements, so nothing is filmed that has nowhere to run.</p>
+    <span class="hand r" style="--i:7;margin-top:22px">targets per night. we tune after the pilot.</span>
+  </div>
+  <div class="out">
+    <div class="r" style="--i:2"><b>1</b><span>Hero film, three to five minutes, for YouTube and the site</span></div>
+    <div class="r" style="--i:3"><b>5</b><span>Full song performances, fireside, one take</span></div>
+    <div class="r" style="--i:4"><b>15</b><span>Paid cuts at 6, 15 and 30 seconds, product in hand</span></div>
+    <div class="r" style="--i:5"><b>40</b><span>Stills for ads, email, PDPs and retail</span></div>
+    <div class="r" style="--i:6"><b>1</b><span>Email story to the full list, with a reason to open it</span></div>
+    <div class="r" style="--i:7"><b>+</b><span>Guest and artist posts you did not pay for</span></div>
+  </div>
+</section>
+
+<section class="s paper" id="s7" data-t="Artists as creators" data-tone="paper">
+  <div>
+    <div class="k r" style="--i:0">07 · Capability two</div>
+    <h2 class="r" style="--i:1;margin-top:16px">Then the artists keep <span class="hl">making</span>.</h2>
+    <p class="r" style="--i:2;margin-top:clamp(12px,1.8vw,22px)">Not influencers. Songwriters. Each artist takes a Solo product home and turns it into original sound and footage, in their own backyard, in their own voice.</p>
+    <ul class="brief">
+      <li class="r" style="--i:3"><b>01</b><span>Each artist picks an angle: the first fire of fall, the tailgate, the quiet Tuesday.</span></li>
+      <li class="r" style="--i:4"><b>02</b><span>Writes a hook around it. An original sound Solo owns and can run.</span></li>
+      <li class="r" style="--i:5"><b>03</b><span>Films it at home, UGC style. Same light and mess as the people who buy one.</span></li>
+      <li class="r" style="--i:6"><b>04</b><span>The best cuts get whitelisted into paid, alongside your creator seeding.</span></li>
+    </ul>
+  </div>
+  <div class="proof r" style="--i:5">
+    <div class="m">The model, already built · Songfinch × Poplin · 2026</div>
+    <div class="n3">10 artists.<br>10 angles.<br><em>10 ads.</em></div>
+    <p>Ten songwriters write, sing and star in UGC ads about laundry day, each from their own home, built for Reels, TikTok and Shorts. Every one delivers a brand-original hook that outlives the campaign, plus a warm audience that already trusts them.</p>
+    <div class="vids">
+      <a href="https://www.tiktok.com/@bonnerblack/video/7263482919706955050" target="_blank" rel="noopener">▶ Artist UGC 01</a>
+      <a href="https://www.tiktok.com/@troy_music/video/7262725044579683627" target="_blank" rel="noopener">▶ Artist UGC 02</a>
+      <a href="https://www.instagram.com/p/Cv-RrUSgo-l/" target="_blank" rel="noopener">▶ Artist UGC 03</a>
+    </div>
+    <p class="m" style="margin-top:14px">Nashville · Chicago · Atlanta · Henderson</p>
+  </div>
+</section>
+
+<section class="s paper" id="s8" data-t="The rollout" data-tone="paper">
+  <div style="display:flex;justify-content:space-between;align-items:end;gap:30px">
+    <div><div class="k r" style="--i:0">08 · The rollout</div><h2 class="r" style="--i:1;margin-top:12px">Start in one yard.<br>Earn the next <em>city</em>.</h2></div>
+    <span class="hand pink r" style="--i:6">each step pays for the next one</span>
+  </div>
+  <div class="map">
+    <div class="stop r" style="--i:2"><div class="ph0">Phase 0 · the pilot</div><h3>One backyard, North Shore</h3><p>A real home on Chicago's North Shore. One night, one artist, full capture. Small enough to get right.</p><div class="line"></div></div>
+    <div class="stop r" style="--i:3"><div class="ph0">Phase 1 · season one</div><h3>Four nights, same neighborhood</h3><p>Same host, four artists. The format finds its rhythm and paid gets a month of fresh creative from every night.</p><div class="line"></div></div>
+    <div class="stop r" style="--i:4"><div class="ph0">Phase 2 · artist backyards</div><h3>The artist hosts at home</h3><p>A subset moves to the artist's own yard. Their place, their people, their town. The series and the creator program in one shoot.</p><div class="line"></div></div>
+    <div class="stop r" style="--i:5"><div class="ph0">Phase 3 · cities</div><h3>City by city</h3><p>Nashville, Austin, Denver, and home turf in DFW. Local artists, local retail partners, the same fire ritual.</p><div class="line"></div></div>
+  </div>
+</section>
+
+<section class="s paper" id="s9" data-t="Why Upperhand" data-tone="paper">
+  <div class="ph crop wipe"><img src="img/uh-cursor.jpg" alt="Upperhand: a figure carrying a giant pixel cursor up a hill" /></div>
+  <div>
+    <div class="k r" style="--i:0">09 · Who is asking</div>
+    <h2 class="r" style="--i:1;margin-top:16px">Design it. Build it.<br>Get it <span class="hl">live</span>.</h2>
+    <p class="r" style="--i:2;margin-top:clamp(12px,1.8vw,22px)">Upperhand is a design-led studio that can actually build. We are also musicians and producers, so the artist relationships are ours, not rented.</p>
+    <div class="rows">
+      <div class="row r" style="--i:3"><b>01</b><h3>The series</h3><p>Name, identity, host format, the look of every frame.</p><span>&rarr;</span></div>
+      <div class="row r" style="--i:4"><b>02</b><h3>The talent</h3><p>Artist sourcing, booking and the creator briefs.</p><span>&rarr;</span></div>
+      <div class="row r" style="--i:5"><b>03</b><h3>The night</h3><p>Production, capture and a shot list built from your placements.</p><span>&rarr;</span></div>
+      <div class="row r" style="--i:6"><b>04</b><h3>The output</h3><p>Edit, versioning and delivery into paid, social and email.</p><span>&rarr;</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="s black" id="s10" data-t="The ask" data-tone="black">
+  <div class="L">
+    <div class="k r" style="--i:0">10 · The ask</div>
+    <div>
+      <h1 class="r" style="--i:1;font-size:clamp(46px,7.2vw,132px)">One night.<br>One yard.<br>One <em>number</em>.</h1>
+      <div class="three">
+        <div class="r" style="--i:2"><h3>The pilot</h3><p>A single Backyard Session on the North Shore this fall. Your product, our production.</p></div>
+        <div class="r" style="--i:3"><h3>The measure</h3><p>Pilot cuts run against your current control in paid. Plus email captures and cost per asset.</p></div>
+        <div class="r" style="--i:4"><h3>The kill switch</h3><p>If the creative does not beat control, we stop. Pilot, learn, adapt.</p></div>
+      </div>
+    </div>
+    <div class="r" style="--i:5;display:flex;align-items:center;gap:22px;flex-wrap:wrap">
+      <a class="cta" href="mailto:hello@getupperhand.io?subject=Backyard%20Sessions">Thirty minutes to walk it &rarr;</a>
+      <span class="m" style="opacity:.6">hello@getupperhand.io · getupperhand.io</span>
+    </div>
+  </div>
+  <div class="ph wipe"><img src="img/flame.jpg" alt="Flame rising from a Solo Stove burner" /><span class="sqr" style="left:0;top:0;background:var(--blue)"></span></div>
+</section>
+
+</main>
+
+<script>
+const S=[...document.querySelectorAll('.s')],N=S.length;let c=0;
+const ticks=document.getElementById('ticks');S.forEach(()=>ticks.appendChild(document.createElement('span')));
+function go(n){n=Math.max(0,Math.min(N-1,n));S.forEach((s,i)=>s.classList.toggle('on',i===n));c=n;
+  [...ticks.children].forEach((t,i)=>t.classList.toggle('on',i<=n));
+  document.body.dataset.tone=S[n].dataset.tone;
+  document.getElementById('idx').textContent=String(n+1).padStart(2,'0')+' / '+N;
+  document.getElementById('ttl').textContent=S[n].dataset.t;
+  history.replaceState(null,'',n?'#'+(n+1):location.pathname);}
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(c+1)}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(c-1)}else if(e.key==='Home')go(0);else if(e.key==='End')go(N-1)});
+document.getElementById('next').onclick=()=>go(c+1);document.getElementById('prev').onclick=()=>go(c-1);
+let tx=0;addEventListener('touchstart',e=>tx=e.changedTouches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{if(innerWidth<=860)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>55)go(c+(d<0?1:-1))},{passive:true});
+go((parseInt(location.hash.slice(1))||1)-1);
+</script>
+</body>
+</html>
