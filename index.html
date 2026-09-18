@@ -468,6 +468,7 @@ const lb=document.getElementById('lb'),lbf=lb.querySelector('iframe');
 function lbClose(){lb.classList.remove('on');lbf.src='about:blank'}
 document.querySelectorAll('[data-embed]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();lbf.src=b.dataset.embed;lb.classList.add('on')}));
 lb.addEventListener('click',lbClose);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)S[c].querySelectorAll('video').forEach(v=>v.play().catch(err=>console.warn('[VIDEO] resume blocked',err)))});
 function show(n){document.querySelectorAll('.s video').forEach(v=>{if(v.closest('.s')===S[n]||MOB()){v.play().catch(err=>console.warn('[VIDEO] autoplay blocked',err))}else v.pause()});S.forEach((s,i)=>{s.style.transition=i===n?'':'none';s.classList.toggle('on',i===n)});c=n;count(S[n]);
   [...ticks.children].forEach((t,i)=>t.classList.toggle('on',i<=n));
   document.body.dataset.tone=S[n].dataset.tone;document.body.toggleAttribute('data-embers',n===0);
