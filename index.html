@@ -108,6 +108,8 @@ p{font-size:clamp(14px,1.18vw,18px);line-height:1.5;max-width:46ch}
 #s3 .panel{background:var(--lime);padding:calc(var(--pad) + 30px) var(--pad) var(--pad);display:flex;flex-direction:column;justify-content:space-between;position:relative}
 #s3 .panel h2{font-size:clamp(30px,3.9vw,72px)}
 #s3 .ph{height:100%}
+#s3 .sun{position:absolute;left:50%;top:40%;width:min(38%,46vh);aspect-ratio:1;border-radius:50%;background:var(--pink);mix-blend-mode:multiply;opacity:0;transform:translate(-50%,-50%) scale(.7)}
+#s3.on .sun{opacity:.82;transform:translate(-50%,-50%);transition:opacity 1.2s ease 1s,transform 1.6s cubic-bezier(.2,.8,.2,1) 1s}
 #s3 .tags{position:absolute;right:var(--pad);bottom:calc(var(--pad) + 14px);display:flex;flex-direction:column;gap:6px;align-items:flex-end;z-index:4}
 #s3 .tags span{background:var(--paper);color:var(--ink);font-family:var(--mono);font-size:clamp(9.5px,.85vw,12px);letter-spacing:.12em;text-transform:uppercase;padding:6px 10px}
 #s3 .tags span b{color:var(--fire)}
@@ -225,7 +227,7 @@ body[data-tone="black"] #embers,body[data-embers] #embers{opacity:1}
 .s .hand{clip-path:inset(-20% 100% -20% 0)}
 .s.on .hand{clip-path:inset(-20% -5% -20% 0);transition:clip-path .9s cubic-bezier(.5,0,.2,1) 1.15s,opacity .4s 1.1s}
 .sqr{transform:scale(0)} .s.on .sqr{transform:none;transition:transform .45s cubic-bezier(.3,1.6,.5,1) 1s}
-@media (prefers-reduced-motion:reduce){#wipe,#embers{display:none}.s h1 .l,.s h2 .l,.s .hand,#s4 .bar,#s8 .line{clip-path:none;transform:none}.hl{background-size:100% 100%}.sqr,.ph img{transform:none}}
+@media (prefers-reduced-motion:reduce){#s3 .sun{opacity:.82;transform:translate(-50%,-50%)}#wipe,#embers{display:none}.s h1 .l,.s h2 .l,.s .hand,#s4 .bar,#s8 .line{clip-path:none;transform:none}.hl{background-size:100% 100%}.sqr,.ph img{transform:none}}
 
 @media (max-width:860px){
   html,body{overflow:auto}
@@ -236,6 +238,7 @@ body[data-tone="black"] #embers,body[data-embers] #embers{opacity:1}
   .s .r,.s .wipe{opacity:1;transform:none;clip-path:none}
   h1 .l,h2 .l{white-space:normal;clip-path:none;transform:none}
   #wipe,#embers{display:none}
+  #s3 .sun{opacity:.82;transform:translate(-50%,-50%)}
   .hl{background-size:100% 100%}
   .s .hand,#s4 .bar,#s8 .line{clip-path:none}
   .sqr,.ph img{transform:none}
@@ -303,7 +306,7 @@ body[data-tone="black"] #embers,body[data-embers] #embers{opacity:1}
   <div class="ph crop wipe"><img src="img/patio.jpg" alt="Solo Stove Bonfire burning on a patio with friends seated around it" /><span class="n">02</span></div>
 </section>
 
-<section class="s paper" id="s3" data-t="The idea" data-tone="paper">
+<section class="s paper" id="s3" data-t="The idea" data-tone="paper" data-wipe="var(--pink)">
   <div class="panel">
     <div class="k r" style="--i:0">03 · The idea</div>
     <div>
@@ -312,7 +315,7 @@ body[data-tone="black"] #embers,body[data-embers] #embers{opacity:1}
     </div>
     <span class="hand r" style="--i:4;color:var(--ink)">nobody watches an ad.<br>everybody stays for a song.</span>
   </div>
-  <div class="ph wipe"><img src="img/beach.jpg" alt="Three friends at dusk on a beach around a Solo Stove fire" /><span class="n">03</span><span class="cap">Photo · Solo Stove</span></div>
+  <div class="ph wipe"><img src="img/beach.jpg" alt="Three friends at dusk on a beach around a Solo Stove fire" /><span class="sun"></span><span class="n">03</span><span class="cap">Photo · Solo Stove</span></div>
   <div class="tags">
     <span class="r" style="--i:3"><b>01</b> Hands-on product, no demo table</span>
     <span class="r" style="--i:4"><b>02</b> Emerging talent, the occasional familiar name</span>
@@ -364,7 +367,7 @@ body[data-tone="black"] #embers,body[data-embers] #embers{opacity:1}
   </div>
 </section>
 
-<section class="s paper" id="s7" data-t="Artists as creators" data-tone="paper">
+<section class="s paper" id="s7" data-t="Artists as creators" data-tone="paper" data-wipe="var(--pink)">
   <div>
     <div class="k r" style="--i:0">07 · Capability two</div>
     <h2 class="r" style="--i:1;margin-top:16px"><span class="l">Then the</span><span class="l">artists keep</span><span class="l"><span class="hl">making</span>.</span></h2>
@@ -462,7 +465,7 @@ const S=[...document.querySelectorAll('.s')],N=S.length;let c=0;
 const ticks=document.getElementById('ticks');S.forEach(()=>ticks.appendChild(document.createElement('span')));
 const wipe=document.getElementById('wipe'),WC={paper:'var(--blue)',black:'var(--fire)',blue:'var(--lime)'};let want=null,busy=false;
 function go(n,instant){n=Math.max(0,Math.min(N-1,n));if(instant||RM||MOB()||!S[c].classList.contains('on'))return show(n);if(n===c&&!busy)return;want=n;if(busy)return;busy=true;
-  wipe.style.background=WC[S[n].dataset.tone];wipe.classList.remove('go');void wipe.offsetWidth;wipe.classList.add('go');
+  wipe.style.background=S[n].dataset.wipe||WC[S[n].dataset.tone];wipe.classList.remove('go');void wipe.offsetWidth;wipe.classList.add('go');
   setTimeout(()=>show(want),380);setTimeout(()=>{busy=false;wipe.classList.remove('go');if(want!==c)go(want)},800)}
 const lb=document.getElementById('lb'),lbf=lb.querySelector('iframe');
 function lbClose(){lb.classList.remove('on');lbf.src='about:blank'}
