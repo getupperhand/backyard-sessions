@@ -203,7 +203,7 @@ p{font-size:clamp(14px,1.18vw,18px);line-height:1.5;max-width:46ch}
 #wipe{position:fixed;inset:0 0 0 var(--rail);z-index:18;background:var(--blue);transform:translateX(-101%);pointer-events:none}
 #wipe.go{animation:wipe .78s cubic-bezier(.77,0,.18,1) both}
 @keyframes wipe{0%{transform:translateX(-101%)}46%,54%{transform:translateX(0)}100%{transform:translateX(101%)}}
-#embers{position:fixed;inset:0 0 0 var(--rail);z-index:15;pointer-events:none;opacity:0;transition:opacity .8s;mix-blend-mode:screen}
+#embers{position:fixed;left:var(--rail);top:0;width:calc(100vw - var(--rail));height:100vh;z-index:15;pointer-events:none;opacity:0;transition:opacity .8s;mix-blend-mode:screen}
 body[data-tone="black"] #embers{opacity:1}
 .s h1 .l,.s h2 .l{clip-path:inset(0 0 105% 0);transform:translateY(.4em)}
 .s.on h1 .l,.s.on h2 .l{clip-path:inset(-12% -4% -12% -4%);transform:none;transition:clip-path .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--li,0)*95ms + 180ms)}
